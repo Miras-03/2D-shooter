@@ -6,33 +6,52 @@ namespace Platformer
     public class GameManager : MonoBehaviour
     {
         public int coinsCounter = 0;
-
         public GameObject playerGameObject;
-        private PlayerController player;
         public GameObject deathPlayerPrefab;
         public Text coinText;
 
-        void Start()
+        private PlayerController player;
+
+        private void Awake()
         {
-            player = GameObject.Find("Player").GetComponent<PlayerController>();
+            player = playerGameObject.GetComponent<PlayerController>();
         }
 
-        void Update()
+        private void Start()
         {
-            coinText.text = coinsCounter.ToString();
-            if(player.deathState == true)
-            {
-                playerGameObject.SetActive(false);
-                GameObject deathPlayer = (GameObject)Instantiate(deathPlayerPrefab, playerGameObject.transform.position, playerGameObject.transform.rotation);
-                deathPlayer.transform.localScale = new Vector3(playerGameObject.transform.localScale.x, playerGameObject.transform.localScale.y, playerGameObject.transform.localScale.z);
-                player.deathState = false;
-                Invoke("ReloadLevel", 3);
-            }
+            UpdateCoinText();
+        }
+
+        private void FixedUpdate()
+        {
+            if (player.deathState)
+                HandlePlayerDeath();
+        }
+
+        private void HandlePlayerDeath()
+        {
+            playerGameObject.SetActive(false);
+            GameObject deathPlayer = Instantiate(deathPlayerPrefab, playerGameObject.transform.position, playerGameObject.transform.rotation);
+            deathPlayer.transform.localScale = playerGameObject.transform.localScale;
+            player.deathState = false;
+            Invoke(nameof(ReloadLevel), 3f);
         }
 
         private void ReloadLevel()
         {
-            Application.LoadLevel(Application.loadedLevel);
+            int activeSceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
+            UnityEngine.SceneManagement.SceneManager.LoadScene(activeSceneIndex);
+        }
+
+        public void IncrementCoins()
+        {
+            coinsCounter++;
+            UpdateCoinText();
+        }
+
+        private void UpdateCoinText()
+        {
+            coinText.text = coinsCounter.ToString();
         }
     }
 }
