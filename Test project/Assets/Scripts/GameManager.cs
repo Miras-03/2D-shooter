@@ -5,11 +5,11 @@ namespace Platformer
 {
     public class GameManager : MonoBehaviour
     {
-        public int coinsCounter = 0;
         public GameObject playerGameObject;
         public GameObject deathPlayerPrefab;
         public Text coinText;
 
+        private int coinsCounter = 0;
         private PlayerController player;
 
         private void Awake()

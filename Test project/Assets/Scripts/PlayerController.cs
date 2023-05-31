@@ -13,6 +13,7 @@ namespace Platformer
 
         private bool isGrounded;
         public Transform groundCheck;
+        public Transform shootPoint;
 
         private Rigidbody2D rigidbody;
         private Animator animator;
@@ -76,6 +77,8 @@ namespace Platformer
             Vector3 scaler = transform.localScale;
             scaler.x *= -1;
             transform.localScale = scaler;
+
+            shootPoint.Rotate(0f, 180f, 0f);
         }
 
         private void CheckGround()
