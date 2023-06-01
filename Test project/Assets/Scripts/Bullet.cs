@@ -1,7 +1,7 @@
-using Unity.VisualScripting;
 using UnityEngine;
+using Photon.Pun;
 
-public class Bullet : MonoBehaviour
+public class Bullet : MonoBehaviourPun
 {
     private float speed = 10f;
     private int damage = 25;
@@ -11,18 +11,31 @@ public class Bullet : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         rb.velocity = transform.right * speed;
+
+        // Only enable collision detection and triggering for the local player's bullet
+        if (!photonView.IsMine)
+        {
+            GetComponent<Collider2D>().enabled = false;
+            rb.simulated = false;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        PlayerHealth health = other.GetComponent<PlayerHealth>();
-        if (health != null)
-            health.TakeDamage(damage);
-        Destroy(gameObject);
+        if (photonView.IsMine)
+        {
+            PlayerHealth health = other.GetComponent<PlayerHealth>();
+            if (health != null)
+                health.TakeDamage(damage);
+
+            // Trigger the destruction of the bullet across the network
+            photonView.RPC("DestroyBullet", RpcTarget.All);
+        }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    [PunRPC]
+    private void DestroyBullet()
     {
-        Destroy (gameObject);
+        Destroy(gameObject);
     }
 }

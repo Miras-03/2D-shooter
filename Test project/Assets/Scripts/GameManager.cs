@@ -1,9 +1,10 @@
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
 namespace Platformer
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager : MonoBehaviourPunCallbacks
     {
         public GameObject playerGameObject;
         public GameObject deathPlayerPrefab;
@@ -15,6 +16,10 @@ namespace Platformer
         private void Awake()
         {
             player = playerGameObject.GetComponent<PlayerController>();
+
+            // Only enable the player GameObject for the local player
+            if (!photonView.IsMine)
+                playerGameObject.SetActive(false);
         }
 
         private void Start()
@@ -24,14 +29,14 @@ namespace Platformer
 
         private void FixedUpdate()
         {
-            if (player.deathState)
+            if (player.deathState && photonView.IsMine)
                 HandlePlayerDeath();
         }
 
         private void HandlePlayerDeath()
         {
             playerGameObject.SetActive(false);
-            GameObject deathPlayer = Instantiate(deathPlayerPrefab, playerGameObject.transform.position, playerGameObject.transform.rotation);
+            GameObject deathPlayer = PhotonNetwork.Instantiate(deathPlayerPrefab.name, playerGameObject.transform.position, playerGameObject.transform.rotation);
             deathPlayer.transform.localScale = playerGameObject.transform.localScale;
             player.deathState = false;
             Invoke(nameof(ReloadLevel), 3f);
@@ -39,14 +44,16 @@ namespace Platformer
 
         private void ReloadLevel()
         {
-            int activeSceneIndex = UnityEngine.SceneManagement.SceneManager.GetActiveScene().buildIndex;
-            UnityEngine.SceneManagement.SceneManager.LoadScene(activeSceneIndex);
+            PhotonNetwork.LoadLevel(PhotonNetwork.CurrentRoom.Name);
         }
 
         public void IncrementCoins()
         {
-            coinsCounter++;
-            UpdateCoinText();
+            if (photonView.IsMine)
+            {
+                coinsCounter++;
+                UpdateCoinText();
+            }
         }
 
         private void UpdateCoinText()

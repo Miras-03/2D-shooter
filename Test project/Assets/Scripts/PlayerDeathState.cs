@@ -5,8 +5,8 @@ namespace Platformer
     public class PlayerDeathState : MonoBehaviour
     {
         public float jumpForce;
-
         private Rigidbody2D rigidbody;
+
         void Start()
         {
             rigidbody = GetComponent<Rigidbody2D>();

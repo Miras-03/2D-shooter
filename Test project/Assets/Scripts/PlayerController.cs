@@ -1,13 +1,12 @@
-using System.Net.Sockets;
-using Unity.VisualScripting;
 using UnityEngine;
+using Photon.Pun;
 
 namespace Platformer
 {
-    public class PlayerController : MonoBehaviour
+    public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
     {
         private float movingSpeed = 5f;
-        private float jumpForce = 5f;
+        private float jumpForce = 7f;
         private float moveInput;
 
         private bool facingRight = false;
@@ -21,24 +20,38 @@ namespace Platformer
         private Animator animator;
         private GameManager gameManager;
 
+        private PhotonView photonView;
+
         private void Awake()
         {
             rigidbody = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
             gameManager = FindObjectOfType<GameManager>();
+            photonView = GetComponent<PhotonView>();
+
+            if (!photonView.IsMine)
+            {
+                // Disable components that should only be active for the local player
+                enabled = false;
+                rigidbody.simulated = false;
+            }
         }
 
         private void FixedUpdate()
         {
-            CheckGround();
+            if (photonView.IsMine)
+                CheckGround();
         }
 
         private void Update()
         {
-            HandleMovement();
-            HandleJump();
-            HandleAnimations();
-            HandleFlip();
+            if (photonView.IsMine)
+            {
+                HandleMovement();
+                HandleJump();
+                HandleAnimations();
+                HandleFlip();
+            }
         }
 
         private void HandleMovement()
@@ -92,7 +105,7 @@ namespace Platformer
         private void OnCollisionEnter2D(Collision2D other)
         {
             if (other.gameObject.CompareTag("Enemy"))
-                deathState = true; 
+                deathState = true;
             else
                 deathState = false;
         }
@@ -103,6 +116,20 @@ namespace Platformer
             {
                 gameManager.IncrementCoins();
                 Destroy(other.gameObject);
+            }
+        }
+
+        public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+        {
+            if (stream.IsWriting)
+            {
+                // Send deathState over the network
+                stream.SendNext(deathState);
+            }
+            else
+            {
+                // Receive deathState from the network
+                deathState = (bool)stream.ReceiveNext();
             }
         }
     }
