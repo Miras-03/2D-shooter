@@ -89,7 +89,16 @@ namespace Platformer
         private void HandleFlip()
         {
             if ((facingRight && moveHorizontal < 0) || (!facingRight && moveHorizontal > 0))
+            {
                 Flip();
+                photonView.RPC("OnDirectionChange", RpcTarget.Others, facingRight);
+            }
+        }
+
+        [PunRPC]
+        private void OnDirectionChange(bool isFacingRight)
+        {
+            Flip();
         }
 
         private void Flip()

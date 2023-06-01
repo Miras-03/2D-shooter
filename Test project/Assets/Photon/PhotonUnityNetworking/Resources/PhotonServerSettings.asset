@@ -43,6 +43,9 @@ MonoBehaviour:
   - FlipRPC
   - IncrementCoins
   - UpdateDeathState
+  - OnDirectionChangeLeft
+  - OnDirectionChangeRight
+  - OnDirectionChange
   DisableAutoOpenWizard: 1
   ShowSettings: 0
   DevRegionSetOnce: 1
