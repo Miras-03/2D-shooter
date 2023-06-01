@@ -1,11 +1,13 @@
+using System.Net.Sockets;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Platformer
 {
     public class PlayerController : MonoBehaviour
     {
-        public float movingSpeed;
-        public float jumpForce;
+        private float movingSpeed = 5f;
+        private float jumpForce = 5f;
         private float moveInput;
 
         private bool facingRight = false;
