@@ -1,5 +1,7 @@
 using UnityEngine;
+using UnityEngine.UI;
 using Photon.Pun;
+using TMPro;
 
 namespace Platformer
 {
@@ -18,6 +20,7 @@ namespace Platformer
 
         public Transform groundCheck;
         public Transform shootPoint;
+        public Transform playerName;
 
         private Rigidbody2D rigidbody;
         private Animator animator;
@@ -25,6 +28,7 @@ namespace Platformer
         private Joystick joystick;
 
         private PhotonView photonView;
+        public TextMeshProUGUI nameText;
         private Vector3 smoothMove;
 
         private void Awake()
@@ -38,6 +42,10 @@ namespace Platformer
         private void Start()
         {
             joystick = GameObject.FindGameObjectWithTag("Joystick").GetComponent<Joystick>();
+            if (photonView.IsMine)
+                nameText.text = PhotonNetwork.NickName;
+            else
+                nameText.text = photonView.Owner.NickName;
         }
 
         private void FixedUpdate()
@@ -109,6 +117,13 @@ namespace Platformer
             transform.localScale = scaler;
 
             shootPoint.Rotate(0f, 180f, 0f);
+            RotatePlayerName();
+        }
+
+        private void RotatePlayerName()
+        {
+            float rotationY = facingRight ? 180f : 0f;
+            playerName.localRotation = Quaternion.Euler(0f, rotationY, 0f);
         }
 
         private void CheckGround()
