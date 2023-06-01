@@ -3,38 +3,41 @@ using Photon.Pun;
 
 namespace Platformer
 {
-    public class PlayerController : MonoBehaviourPunCallbacks, IPunObservable
+    public class PlayerController : MonoBehaviourPun, IPunObservable
     {
-        private float movingSpeed = 5f;
+        private float movingSpeed = 7f;
         private float jumpForce = 7f;
-        private float moveInput;
+        private float moveHorizontal;
+        private float moveVertical;
 
         private bool facingRight = false;
         [HideInInspector] public bool deathState = false;
 
         private bool isGrounded;
+        private bool isJumping = false;
+
         public Transform groundCheck;
         public Transform shootPoint;
 
         private Rigidbody2D rigidbody;
         private Animator animator;
-        private GameManager gameManager;
+        //private GameManager gameManager;
+        private Joystick joystick;
 
         private PhotonView photonView;
+        private Vector3 smoothMove;
 
         private void Awake()
         {
             rigidbody = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
-            gameManager = FindObjectOfType<GameManager>();
+            //gameManager = FindObjectOfType<GameManager>();
             photonView = GetComponent<PhotonView>();
+        }
 
-            if (!photonView.IsMine)
-            {
-                // Disable components that should only be active for the local player
-                enabled = false;
-                rigidbody.simulated = false;
-            }
+        private void Start()
+        {
+            joystick = GameObject.FindGameObjectWithTag("Joystick").GetComponent<Joystick>();
         }
 
         private void FixedUpdate()
@@ -45,22 +48,28 @@ namespace Platformer
 
         private void Update()
         {
+            moveHorizontal = joystick.Horizontal;
+            moveVertical = joystick.Vertical;
             if (photonView.IsMine)
             {
                 HandleMovement();
                 HandleJump();
-                HandleAnimations();
                 HandleFlip();
             }
+            else
+                SmoothMove();
+        }
+
+        private void SmoothMove()
+        {
+            transform.position = Vector3.Lerp(transform.position, smoothMove, Time.deltaTime);
         }
 
         private void HandleMovement()
         {
-            moveInput = Input.GetAxis("Horizontal");
-
-            if (Mathf.Abs(moveInput) > 0)
+            if (Mathf.Abs(moveHorizontal) > 0)
             {
-                Vector3 direction = transform.right * moveInput;
+                Vector3 direction = transform.right * moveHorizontal;
                 transform.position += direction * movingSpeed * Time.deltaTime;
                 animator.SetInteger("playerState", 1);
             }
@@ -70,19 +79,16 @@ namespace Platformer
 
         private void HandleJump()
         {
-            if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+            if (moveVertical > 0.4f && isGrounded && !isJumping)
+            {
+                isJumping = true;
                 rigidbody.AddForce(transform.up * jumpForce, ForceMode2D.Impulse);
-        }
-
-        private void HandleAnimations()
-        {
-            if (!isGrounded)
-                animator.SetInteger("playerState", 2);
+            }
         }
 
         private void HandleFlip()
         {
-            if ((facingRight && moveInput < 0) || (!facingRight && moveInput > 0))
+            if ((facingRight && moveHorizontal < 0) || (!facingRight && moveHorizontal > 0))
                 Flip();
         }
 
@@ -108,29 +114,25 @@ namespace Platformer
                 deathState = true;
             else
                 deathState = false;
+            if (other.gameObject.CompareTag("Ground"))
+                isJumping = false;
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
+        /*private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.gameObject.CompareTag("Coin"))
             {
                 gameManager.IncrementCoins();
                 Destroy(other.gameObject);
             }
-        }
+        }*/
 
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
             if (stream.IsWriting)
-            {
-                // Send deathState over the network
-                stream.SendNext(deathState);
-            }
+                stream.SendNext(transform.position);
             else
-            {
-                // Receive deathState from the network
-                deathState = (bool)stream.ReceiveNext();
-            }
+                smoothMove = (Vector3)stream.ReceiveNext();
         }
     }
 }

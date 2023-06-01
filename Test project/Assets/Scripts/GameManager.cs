@@ -17,7 +17,6 @@ namespace Platformer
         {
             player = playerGameObject.GetComponent<PlayerController>();
 
-            // Only enable the player GameObject for the local player
             if (!photonView.IsMine)
                 playerGameObject.SetActive(false);
         }
