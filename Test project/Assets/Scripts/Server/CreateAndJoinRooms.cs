@@ -1,7 +1,7 @@
 using Photon.Pun;
 using TMPro;
 
-public class CreateAndJoiinRooms : MonoBehaviourPunCallbacks
+public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
 {
     public TMP_InputField createInput;
     public TMP_InputField joinInput;

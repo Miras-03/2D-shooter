@@ -584,8 +584,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2048701228}
-        m_TargetAssemblyTypeName: CreateAndJoiinRooms, Assembly-CSharp
+      - m_Target: {fileID: 2048701231}
+        m_TargetAssemblyTypeName: CreateAndJoinRooms, Assembly-CSharp
         m_MethodName: JoinRoom
         m_Mode: 1
         m_Arguments:
@@ -853,8 +853,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2048701228}
-        m_TargetAssemblyTypeName: CreateAndJoiinRooms, Assembly-CSharp
+      - m_Target: {fileID: 2048701231}
+        m_TargetAssemblyTypeName: CreateAndJoinRooms, Assembly-CSharp
         m_MethodName: CreateRoom
         m_Mode: 1
         m_Arguments:
@@ -982,9 +982,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Your name...
-
-'
+  m_text: "\u0412\u0430\u0448\u0435 \u0438\u043C\u044F...\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1529,7 +1527,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Create
+  m_text: "\u0421\u043E\u0437\u0434\u0430\u0442\u044C\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
@@ -1987,7 +1985,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Join
+  m_text: "\u0412\u043E\u0439\u0442\u0438"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
@@ -2122,7 +2120,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Set name
+  m_text: "\u0423\u0441\u0442\u0430\u043D\u043E\u0432\u0438\u0442\u044C"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
   m_sharedMaterial: {fileID: 2100000, guid: 125cb55b44b24c4393181402bc6200e6, type: 2}
@@ -2399,9 +2397,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Room...
-
-'
+  m_text: "\u041A\u043E\u043C\u043D\u0430\u0442\u0430...\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2733,9 +2729,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Room...
-
-'
+  m_text: "\u041A\u043E\u043C\u043D\u0430\u0442\u0430...\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2821,7 +2815,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2048701229}
-  - component: {fileID: 2048701228}
+  - component: {fileID: 2048701231}
   m_Layer: 0
   m_Name: CreateAndJoinRooms
   m_TagString: Untagged
@@ -2829,20 +2823,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &2048701228
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2048701227}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba15df541707aec4f8f3c56e7463c37c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  createInput: {fileID: 1874815337}
-  joinInput: {fileID: 1034055965}
 --- !u!4 &2048701229
 Transform:
   m_ObjectHideFlags: 0
@@ -2858,3 +2838,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2048701231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2048701227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba15df541707aec4f8f3c56e7463c37c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  createInput: {fileID: 1874815337}
+  joinInput: {fileID: 1034055965}

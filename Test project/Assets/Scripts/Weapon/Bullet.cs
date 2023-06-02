@@ -24,7 +24,6 @@ public class Bullet : MonoBehaviourPun
     {
         if (other.CompareTag("Player"))
         {
-            Debug.Log("First");
             HealthBar health = other.GetComponent<HealthBar>();
             if (health != null)
                 health.TakeDamage(damage);

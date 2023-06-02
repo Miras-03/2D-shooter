@@ -32,18 +32,12 @@ namespace Platformer
                 HandlePlayerDeath();
         }
 
-        private void HandlePlayerDeath()
+        public void HandlePlayerDeath()
         {
-            playerGameObject.SetActive(false);
+            //playerGameObject.SetActive(false);
             GameObject deathPlayer = PhotonNetwork.Instantiate(deathPlayerPrefab.name, playerGameObject.transform.position, playerGameObject.transform.rotation);
             deathPlayer.transform.localScale = playerGameObject.transform.localScale;
             player.deathState = false;
-            Invoke(nameof(ReloadLevel), 3f);
-        }
-
-        private void ReloadLevel()
-        {
-            PhotonNetwork.LoadLevel(PhotonNetwork.CurrentRoom.Name);
         }
 
         public void IncrementCoins()

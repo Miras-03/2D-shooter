@@ -1,7 +1,6 @@
 using UnityEngine;
 using Photon.Pun;
 using TMPro;
-
 namespace Platformer
 {
     public class PlayerController : MonoBehaviourPun, IPunObservable
@@ -23,7 +22,7 @@ namespace Platformer
 
         private Rigidbody2D rigidbody;
         private Animator animator;
-        //private GameManager gameManager;
+        private GameManager gameManager;
         private Joystick joystick;
 
         private PhotonView photonView;
@@ -34,7 +33,7 @@ namespace Platformer
         {
             rigidbody = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
-            //gameManager = FindObjectOfType<GameManager>();
+            gameManager = FindObjectOfType<GameManager>();
             photonView = GetComponent<PhotonView>();
         }
 
@@ -122,8 +121,8 @@ namespace Platformer
         private void RotatePlayerBelong()
         {
             float rotationY = facingRight ? 180f : 0f;
-            playerBelong[0].localRotation = Quaternion.Euler(0f, rotationY, 0f);
-            playerBelong[1].localRotation = Quaternion.Euler(0f, rotationY, 0f);
+            foreach (Transform t in playerBelong)
+                t.localRotation = Quaternion.Euler(0f, rotationY, 0f);
         }
 
         private void CheckGround()
@@ -142,14 +141,14 @@ namespace Platformer
                 isJumping = false;
         }
 
-        /*private void OnTriggerEnter2D(Collider2D other)
+        private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.gameObject.CompareTag("Coin"))
             {
                 gameManager.IncrementCoins();
                 Destroy(other.gameObject);
             }
-        }*/
+        }
             
         public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
